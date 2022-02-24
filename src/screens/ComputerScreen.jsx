@@ -37,10 +37,11 @@ function ComputerScreen(props) {
     }
 
     function switchSession(sessionIndex) {
-        currentSession.sessionData = 
-        availableSessions.sessionsData[
-            Object.keys(availableSessions.sessionsData)[sessionIndex]
-        ];
+        setCurrentSession({
+            sessionData: availableSessions.sessionsData[
+                Object.keys(availableSessions.sessionsData)[sessionIndex]
+            ]
+        })
     }
 
     return (

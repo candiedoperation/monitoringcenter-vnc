@@ -27,16 +27,16 @@ function VncUserSessions(props) {
           <Box>
             <List>
               {
-                Object.keys(props.availableSessions).map(session => {
+                Object.keys(props.availableSessions).map((session, index) => {
                   return (
-                    <ListItemButton onClick={() => { }}>
+                    <ListItemButton onClick={() => { props.switchSessionRequest(index); props.visibleToggleRequest(); }}>
                       <ListItemAvatar>
                         <Avatar>
                           <FolderIcon />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
-                        primary="Single-line item"
+                        primary={session}
                         secondary="Secondary text"
                       />
                     </ListItemButton>

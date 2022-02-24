@@ -16,7 +16,6 @@ const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={r
 function VncStreamer(props) {
   const [vncKey, setVncKey] = React.useState(0);
   const [viewOnly, setViewOnly] = React.useState(true);
-  const [currentSessionTitle, setCurrentSessionTitle] = React.useState('Connecting');
   const [viewOnlyButton, setViewOnlyButton] = React.useState('Remote Control');
   const [isLoading, setIsLoading] = React.useState(true);
   const [activeUsersVisible, setActiveUsersVisible] = React.useState(false);
@@ -33,6 +32,11 @@ function VncStreamer(props) {
       setVncKey(getRandomId());      
     }
   };
+
+  const handleSessionSwitch = (sessionID) => {
+    props.switchSessionRequest(sessionID);
+    setVncKey(getRandomId());
+  }
 
   return (
     <Box>
@@ -109,7 +113,7 @@ function VncStreamer(props) {
       <VncUserSessions
         visibility={activeUsersVisible}
         visibleToggleRequest={() => { setActiveUsersVisible(false); }}
-        switchSessionRequest={props.switchSessionRequest}
+        switchSessionRequest={handleSessionSwitch}
         availableSessions={props.availableSessions}
       />
     </Box>
