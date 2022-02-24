@@ -1,49 +1,72 @@
 import * as React from 'react';
-import { Box, Container, Divider, Typography } from '@mui/material';
+import {
+    Box, Container, Divider, Typography, Snackbar,
+} from '@mui/material';
+import MuiAlert from '@mui/material/Alert';
+import axios from 'axios';
 import MyComputersList from '../components/MyComputersList';
 import VncStreamer from '../components/VncStreamer';
+import getAvailableSessions from '../controllers/sessionController';
 
-const PingTest = (props) => {
-    function pingComputer(ipDnsAddress) {
-        fetch('http://localhost:3001/ping', { method: 'POST' })
-            .then((response) => {
-                if (response.status === 200) {
-                    console.log('success');
+function ComputerScreen(props) {
+    const [viewerOpen, setViewerOpen] = React.useState(false);
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [snackbarText, setSnackbarText] = React.useState('');
+    const [currentSession, setCurrentSession] = React.useState({});
+    let availableSessions = {};
+
+    function switchComputer(computerData) {
+        if (computerData) {
+            getAvailableSessions(computerData, (err, availSessions) => {
+                if (err) {
+                    setViewerOpen(false);
+                    setSnackbarText(err.message);
+                    setSnackbarOpen(true);
                 } else {
-                    console.log('error');
+                    console.log(availSessions);
+                    availableSessions = availSessions;
+
+                    switchSession(0);
+                    setViewerOpen(!viewerOpen);
                 }
             })
-            .catch((error) => {
-                console.log('network error: ' + error);
-            })
+        } else {
+            setViewerOpen(!viewerOpen);
+        }
     }
 
-    const [viewerOpen, setViewerOpen] = React.useState(false);
-    const [currentComputer, setCurrentComputer] = React.useState({});
-
-    function streamVNCID(computerData) {
-        setViewerOpen(!viewerOpen);
-        if (computerData)
-            setCurrentComputer(computerData);
+    function switchSession(sessionIndex) {
+        setCurrentSession(() => (
+            availableSessions[
+            Object.keys(availableSessions)[sessionIndex]
+            ]
+        ));
     }
 
     return (
         <Box>
             <Container fixed>
-                <Typography variant='h3'>Computers</Typography>
+                <Typography variant="h3">Computers</Typography>
                 <Divider />
-                <Box marginTop={"20px"}>
-                    <MyComputersList viewToggleRequest={streamVNCID} />
+                <Box marginTop="20px">
+                    <MyComputersList viewToggleRequest={switchComputer} />
                 </Box>
             </Container>
-            <VncStreamer 
-                isViewerOpen={viewerOpen} 
-                appbarTitle={currentComputer.name}
-                wsUrl={`ws://${currentComputer.address}`}
-                viewToggleRequest={streamVNCID}
+            <VncStreamer
+                isViewerOpen={viewerOpen}
+                currentSession={currentSession}
+                viewToggleRequest={switchComputer}
             />
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={() => { setSnackbarOpen(false); }}
+            >
+                <MuiAlert elevation={6} variant="filled" severity="error">{snackbarText}</MuiAlert>
+            </Snackbar>
         </Box>
     );
-};
+}
 
-export default PingTest;
+export default ComputerScreen;
