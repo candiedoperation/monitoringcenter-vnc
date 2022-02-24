@@ -5,9 +5,7 @@ function getAvailableSessions(computerData, callback) {
         .get(`http://${computerData.address}:${computerData.port}/hostcore/getmappedports`, { crossDomain: true })
         .then((hostInfo) => {
             if (Object.keys(hostInfo.data).length === 0) {
-                setViewerOpen(false);
-                setSnackbarText('No Active Users');
-                setSnackbarOpen(true);
+                callback({ message: 'No Active Users' });
             } else {
                 const availableSessionsBfr = {};
                 Object.keys(hostInfo.data).forEach((session) => {

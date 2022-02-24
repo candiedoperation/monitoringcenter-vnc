@@ -30,8 +30,6 @@ const RemoteDisplay = React.forwardRef((props, ref) => {
 
                     switchSession(0);
                     setViewerOpen(true);
-
-                    console.log(currentSession.sessionData)
                 }
             })
         } else {

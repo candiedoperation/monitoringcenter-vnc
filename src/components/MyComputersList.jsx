@@ -19,8 +19,13 @@ function createData(name, location, address, port, actions) {
 }
 
 const computersList = [
-  createData('DESKTOP-M7JS9G9', 'Office', '10.0.0.170', '22200'),
   createData('Desktop 01', 'Office', '10.0.0.171', '22200'),
+  createData('Desktop 02', 'Office', '10.0.0.172', '22200'),
+  createData('Desktop 03', 'Office', '10.0.0.173', '22200'),
+  createData('Desktop 04', 'Office', '10.0.0.174', '22200'),
+  createData('Desktop 05', 'Office', '10.0.0.175', '22200'),
+  createData('Laptop 01', 'Office', '10.0.0.176', '22200'),
+  createData('Laptop 02', 'Office', '10.0.0.177', '22200'),
 ];
 
 function MyComputersList(props) {
