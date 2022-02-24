@@ -19,7 +19,7 @@ function createData(name, location, address, port, actions) {
 }
 
 const computersList = [
-  createData('My PC', 'Office', '10.0.0.170', '22200'),
+  createData('DESKTOP-M7JS9G9', 'Office', '10.0.0.170', '22200'),
   createData('Desktop 01', 'Office', '10.0.0.171', '22200'),
 ];
 

@@ -12,8 +12,8 @@ function ComputerScreen(props) {
     const [viewerOpen, setViewerOpen] = React.useState(false);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarText, setSnackbarText] = React.useState('');
-    const [currentSession, setCurrentSession] = React.useState({});
-    let availableSessions = {};
+    const [currentSession, setCurrentSession] = React.useState({ sessionData: {} });
+    const [availableSessions, setAvailableSessions] = React.useState({ sessionsData: {} });
 
     function switchComputer(computerData) {
         if (computerData) {
@@ -23,11 +23,12 @@ function ComputerScreen(props) {
                     setSnackbarText(err.message);
                     setSnackbarOpen(true);
                 } else {
-                    console.log(availSessions);
-                    availableSessions = availSessions;
+                    availableSessions.sessionsData = availSessions;
 
                     switchSession(0);
                     setViewerOpen(true);
+
+                    console.log(currentSession.sessionData)
                 }
             })
         } else {
@@ -36,11 +37,10 @@ function ComputerScreen(props) {
     }
 
     function switchSession(sessionIndex) {
-        setCurrentSession(() => (
-            availableSessions[
-            Object.keys(availableSessions)[sessionIndex]
-            ]
-        ));
+        currentSession.sessionData = 
+        availableSessions.sessionsData[
+            Object.keys(availableSessions.sessionsData)[sessionIndex]
+        ];
     }
 
     return (
@@ -54,7 +54,9 @@ function ComputerScreen(props) {
             </Container>
             <VncStreamer
                 isViewerOpen={viewerOpen}
-                currentSession={currentSession}
+                currentSession={currentSession.sessionData}
+                availableSessions={availableSessions.sessionsData}
+                switchSessionRequest={switchSession}
                 viewToggleRequest={switchComputer}
             />
             <Snackbar

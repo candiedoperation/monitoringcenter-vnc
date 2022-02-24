@@ -13,6 +13,8 @@ function getAvailableSessions(computerData, callback) {
                 Object.keys(hostInfo.data).forEach((session) => {
                     const currentSessionBfr = hostInfo.data[session];
                     availableSessionsBfr[currentSessionBfr.userInfo.username] = {
+                        computerData: computerData,
+                        username: currentSessionBfr.userInfo.username,
                         vncPort: +session,
                         mctPort: +currentSessionBfr.mctPort,
                         wsUrl: `${currentSessionBfr.wsProtocol}://${computerData.address}:${currentSessionBfr.mctPort}`,

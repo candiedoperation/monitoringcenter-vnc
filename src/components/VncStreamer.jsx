@@ -56,7 +56,7 @@ function VncStreamer(props) {
             }}
             >
               <Typography style={{ alignSelf: 'center' }} variant="h6" component="div">
-                {(isLoading) ? 'Connecting' : currentSessionTitle}
+                {(isLoading) ? 'Connecting' : (`${props.currentSession.username} at ${props.currentSession.computerData.name}`)}
               </Typography>
               <CircularProgress
                 style={{
@@ -80,7 +80,6 @@ function VncStreamer(props) {
               variant="contained"
               color="inherit"
               style={{
-
                 color: '#000000',
                 marginLeft: '10px',
               }}
@@ -110,6 +109,8 @@ function VncStreamer(props) {
       <VncUserSessions
         visibility={activeUsersVisible}
         visibleToggleRequest={() => { setActiveUsersVisible(false); }}
+        switchSessionRequest={props.switchSessionRequest}
+        availableSessions={props.availableSessions}
       />
     </Box>
   );

@@ -4,6 +4,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
+import FolderIcon from '@mui/icons-material/Folder';
 
 function VncUserSessions(props) {
   return (
@@ -18,6 +24,27 @@ function VncUserSessions(props) {
             You may click their profiles to view or
             control their sessions.
           </DialogContentText>
+          <Box>
+            <List>
+              {
+                Object.keys(props.availableSessions).map(session => {
+                  return (
+                    <ListItemButton onClick={() => { }}>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <FolderIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary="Single-line item"
+                        secondary="Secondary text"
+                      />
+                    </ListItemButton>
+                  );
+                })
+              }
+            </List>
+          </Box>
         </DialogContent>
       </Dialog>
     </Box>
