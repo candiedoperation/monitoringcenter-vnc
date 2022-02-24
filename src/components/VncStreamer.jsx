@@ -25,12 +25,12 @@ function VncStreamer(props) {
   const toggleViewOnly = () => {
     if (viewOnly == true) {
       setViewOnlyButton('View Only');
-      setVncKey(getRandomId());
       setViewOnly(!viewOnly);
+      setVncKey(getRandomId());
     } else {
       setViewOnlyButton('Remote Control');
-      setVncKey(getRandomId());
       setViewOnly(!viewOnly);
+      setVncKey(getRandomId());      
     }
   };
 
@@ -39,7 +39,6 @@ function VncStreamer(props) {
       <Dialog
         fullScreen
         open={props.isViewerOpen}
-        onClick={() => { props.viewToggleRequest(); }}
         TransitionComponent={Transition}
       >
         <AppBar style={{ background: '#000000' }} sx={{ position: 'relative' }}>

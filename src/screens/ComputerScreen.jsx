@@ -27,11 +27,11 @@ function ComputerScreen(props) {
                     availableSessions = availSessions;
 
                     switchSession(0);
-                    setViewerOpen(!viewerOpen);
+                    setViewerOpen(true);
                 }
             })
         } else {
-            setViewerOpen(!viewerOpen);
+            setViewerOpen(false);
         }
     }
 
