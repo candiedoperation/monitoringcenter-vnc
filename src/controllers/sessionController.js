@@ -30,4 +30,6 @@ function getAvailableSessions(computerData, callback) {
         });
 }
 
-export default getAvailableSessions;
+export {
+    getAvailableSessions
+};
