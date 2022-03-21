@@ -11,7 +11,7 @@ function App() {
   const monitoringcenterTheme = createTheme({
     palette: {
       primary: {
-        main: '#E91E63'
+        main: '#2196F3'
       }
     }
   });
@@ -20,7 +20,7 @@ function App() {
     <ThemeProvider theme={monitoringcenterTheme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/dashboard/*" element={<MainScreen />} />
+          <Route path="/*" element={<MainScreen />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

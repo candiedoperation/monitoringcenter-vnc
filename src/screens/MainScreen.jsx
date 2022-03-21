@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import * as React from 'react';
 import AppBarComponent from '../components/AppBarComponent';
+import AppFooter from '../components/AppFooter';
 import ComputerScreen from './ComputerScreen';
 import RequireAuth from '../components/RequireAuth';
 
@@ -19,7 +20,7 @@ function MainScreen() {
       <Box marginTop="20px">
         <Routes>
           <Route
-            path="/computers"
+            path="/"
             element={
               <RequireAuth>
                 <ComputerScreen />
@@ -27,6 +28,7 @@ function MainScreen() {
             }
           />
         </Routes>
+        <AppFooter />
       </Box>
     </Box>
   );

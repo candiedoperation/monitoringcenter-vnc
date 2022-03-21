@@ -20,7 +20,7 @@ const RemoteDisplay = React.forwardRef((props, ref) => {
 
     function switchComputer(computerData) {
         if (computerData) {
-            getAvailableSessions(computerData, (err, availSessions) => {
+            /*(getAvailableSessions(computerData, (err, availSessions) => {
                 if (err) {
                     setViewerOpen(false);
                     setSnackbarText(err.message);
@@ -31,7 +31,10 @@ const RemoteDisplay = React.forwardRef((props, ref) => {
                     switchSession(0);
                     setViewerOpen(true);
                 }
-            })
+            })*/
+
+            switchSession(0);
+            setViewerOpen(true);
         } else {
             setViewerOpen(false);
         }
@@ -49,9 +52,6 @@ const RemoteDisplay = React.forwardRef((props, ref) => {
         <Portal>
             <VncStreamer
                 isViewerOpen={viewerOpen}
-                currentSession={currentSession.sessionData}
-                availableSessions={availableSessions.sessionsData}
-                switchSessionRequest={switchSession}
                 viewToggleRequest={switchComputer}
             />
             <Snackbar
