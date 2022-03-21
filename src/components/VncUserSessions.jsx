@@ -26,7 +26,7 @@ function VncUserSessions(props) {
           </DialogContentText>
           <Box>
             <List>
-              {/*
+              {
                 Object.keys(props.availableSessions).map((session, index) => {
                   return (
                     <ListItemButton key={`${session}-${index}`} onClick={() => { props.switchSessionRequest(index); props.visibleToggleRequest(); }}>
@@ -37,12 +37,12 @@ function VncUserSessions(props) {
                       </ListItemAvatar>
                       <ListItemText
                         primary={session}
-                        secondary={`${props.availableSessions[session].computerData.name} at ${props.availableSessions[session].computerData.address}:${props.availableSessions[session].mctPort}`}
+                        secondary={`${props.availableSessions[session].computerData.name} at ${props.availableSessions[session].computerData.address}:${props.availableSessions[session].vncPort}`}
                       />
                     </ListItemButton>
                   );
                 })
-              */}
+              }
             </List>
           </Box>
         </DialogContent>

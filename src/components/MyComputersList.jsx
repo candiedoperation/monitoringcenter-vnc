@@ -48,7 +48,7 @@ function MyComputersList(props) {
       <TableBody>
         {computersList.map((row) => (
           <TableRow
-            key={row.name}
+            key={row.address}
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
           >
             <TableCell component="th" scope="row">
@@ -107,7 +107,7 @@ function MyComputersGrid(props) {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={3}>
         {computersList.map((row) => (
-          <ComputerDataCard computerData={row} />
+          <ComputerDataCard key={row.address} computerData={row} />
         ))}
       </Grid>
     </Box>

@@ -34,7 +34,7 @@ function VncStreamer(props) {
   };
 
   const handleSessionSwitch = (sessionID) => {
-    //props.switchSessionRequest(sessionID);
+    props.switchSessionRequest(sessionID);
     setVncKey(getRandomId());
   }
 
@@ -60,7 +60,7 @@ function VncStreamer(props) {
             }}
             >
               <Typography style={{ alignSelf: 'center' }} variant="h6" component="div">
-                {(isLoading) ? 'Connecting' : 'Connected'}
+                {(isLoading) ? 'Connecting' : (`${props.currentSession.username} at ${props.currentSession.computerData.name}`)}
               </Typography>
               <CircularProgress
                 style={{
@@ -95,7 +95,7 @@ function VncStreamer(props) {
         </AppBar>
         <VncScreen
           key={vncKey}
-          url={"ws://10.0.0.171:22200"}
+          url={props.currentSession.wsUrl}
           scaleViewport
           viewOnly={viewOnly}
           background="#000000"
@@ -112,9 +112,9 @@ function VncStreamer(props) {
       </Dialog>
       <VncUserSessions
         visibility={activeUsersVisible}
-        //visibleToggleRequest={() => { setActiveUsersVisible(false); }}
-        //switchSessionRequest={handleSessionSwitch}
-        //availableSessions={props.availableSessions}
+        visibleToggleRequest={() => { setActiveUsersVisible(false); }}
+        switchSessionRequest={handleSessionSwitch}
+        availableSessions={props.availableSessions}
       />
     </Box>
   );
