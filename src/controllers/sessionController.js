@@ -1,37 +1,39 @@
-import axios from 'axios';
+import { io } from "socket.io-client";
 
 function getAvailableSessions(computerData, callback) {
-    axios
-        .get(`http://${computerData.address}:${computerData.port}/api/sessions`, { crossDomain: true })
-        .then((hostInfo) => {
-            if (Object.keys(hostInfo.data).length === 0) {
-                callback({ message: 'No Active Users' });
-            } else {
-                let availableSessionsBfr = {};
-                Object.keys(hostInfo.data).forEach((session) => {
-                    let currentSessionBfr = hostInfo.data[session];
-                    if (availableSessionsBfr[currentSessionBfr.userInfo.username])
-                        currentSessionBfr.userInfo.username =
-                            `${currentSessionBfr.userInfo.username} (${computerData.address}:${currentSessionBfr.vncPort})`
-
-                    availableSessionsBfr[currentSessionBfr.userInfo.username] = {
-                        computerData: computerData,
-                        username: currentSessionBfr.userInfo.username,
-                        vncPort: currentSessionBfr.vncPort,
-                        wsUrl: `${currentSessionBfr.wsProtocol}://${computerData.address}:${currentSessionBfr.vncPort}`,
-                    };
-
-                    if (Object.keys(availableSessionsBfr).length == Object.keys(hostInfo.data).length)
-                        callback(null, availableSessionsBfr);
-                });
-            }
-        })
-        .catch((err) => {
-            callback(err)
-            console.log(`Err: ${err}`);
+    initSocketConnection(computerData, (connectedSocket) => {
+        connectedSocket.emit("get_sessions", { requestId: connectedSocket.id, type: 'frontend' });
+        connectedSocket.on("get_sessions_reply", (sessions) => {
+            connectedSocket.disconnect();
+            console.log(`Disconnect to Host Service Attempted`);
+            callback(null, sessions);
         });
+    })
+}
+
+function getSessionData(computerData, sessionId, callback) {
+    initSocketConnection(computerData, (connectedSocket) => {
+        connectedSocket.emit("get_session_data", { requestId: connectedSocket.id, type: 'frontend', sessionId: sessionId });
+        connectedSocket.on("get_session_reply", (sessionInfo) => {
+            connectedSocket.disconnect();
+            console.log(`Disconnect to Host Service Attempted`);
+            callback(null, {
+                ...sessionInfo,
+                computerData: computerData
+            });
+        });
+    });
+}
+
+function initSocketConnection(computerData, callback) {
+    const connectedSocket = io(`http://${computerData.address}:${computerData.port}`);
+    connectedSocket.on("connect", () => {
+        console.log(`Connected to Host Service with ID: ${connectedSocket.id}`)
+        callback(connectedSocket)
+    })
 }
 
 export {
-    getAvailableSessions
+    getAvailableSessions,
+    getSessionData
 };

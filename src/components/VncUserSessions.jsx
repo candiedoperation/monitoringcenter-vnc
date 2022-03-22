@@ -9,7 +9,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
-import FolderIcon from '@mui/icons-material/Folder';
+import UserIcon from '@mui/icons-material/AccountCircleRounded';
 
 function VncUserSessions(props) {
   return (
@@ -27,12 +27,12 @@ function VncUserSessions(props) {
           <Box>
             <List>
               {
-                Object.keys(props.availableSessions).map((session, index) => {
+                /*Object.keys(props.availableSessions).map((session, index) => {
                   return (
                     <ListItemButton key={`${session}-${index}`} onClick={() => { props.switchSessionRequest(index); props.visibleToggleRequest(); }}>
                       <ListItemAvatar>
-                        <Avatar>
-                          <FolderIcon />
+                        <Avatar style={{ background: "black" }}>
+                          <UserIcon  />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
@@ -41,7 +41,7 @@ function VncUserSessions(props) {
                       />
                     </ListItemButton>
                   );
-                })
+                })*/
               }
             </List>
           </Box>
