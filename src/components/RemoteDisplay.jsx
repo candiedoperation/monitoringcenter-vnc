@@ -21,7 +21,6 @@ const RemoteDisplay = React.forwardRef((props, ref) => {
     const [viewOnlyButton, setViewOnlyButton] = React.useState('Remote Control');
     const [isLoading, setIsLoading] = React.useState(true);
     const [activeUsersVisible, setActiveUsersVisible] = React.useState(false);
-    const getRandomId = () => parseInt(Math.random() * 100, 10);
 
     const [viewerOpen, setViewerOpen] = React.useState(false);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
@@ -34,29 +33,31 @@ const RemoteDisplay = React.forwardRef((props, ref) => {
     });
 
     React.useImperativeHandle(ref, () => ({
-        RemoteDisplayComputer(computerData) {
-            switchComputer(computerData);
+        RemoteDisplayComputer(computerData, callback) {
+            switchComputer(computerData, callback);
         }
     }));
 
-    function switchComputer(computerData) {
-            getAvailableSessions(computerData, (err, sessions) => {
-                if (err) {
-                    setViewerOpen(false);
-                    setSnackbarText(err.message);
-                    setSnackbarOpen(true);
-                } else {
-                    console.log(sessions); //REmove on Debug
-                    switchSession(computerData, Object.keys(sessions)[0])
-                    setViewerOpen(true);
-                }
-            })
+    function switchComputer(computerData, callback) {
+        getAvailableSessions(computerData, (err, sessions) => {
+            if (err) {
+                setViewerOpen(false);
+                setSnackbarText(err.message);
+                setSnackbarOpen(true);
+                callback(err);
+            } else {
+                console.log(sessions); //REmove on Debug
+                switchSession(computerData, Object.keys(sessions)[0])
+                setViewerOpen(true);
+                callback(null, true)
+            }
+        })
     }
 
     function switchSession(computerData, sessionId) {
         getSessionData(computerData, sessionId, (err, sessionData) => {
             console.log(sessionData);
-            setSessionData({ renderKey: sessionId + "_viewonly", ...sessionData })
+            setSessionData({ renderKey: sessionId, ...sessionData })
         })
     }
 
@@ -65,11 +66,9 @@ const RemoteDisplay = React.forwardRef((props, ref) => {
         if (viewOnly == true) {
             setViewOnlyButton('View Only');
             setViewOnly(!viewOnly);
-            setSessionData({ ...sessionData, renderKey: sessionData.renderKey + "_remote" })
         } else {
             setViewOnlyButton('Remote Control');
             setViewOnly(!viewOnly);
-            setSessionData({ ...sessionData, renderKey: sessionData.renderKey + "_viewonly" })
         }
     };
 
@@ -110,7 +109,7 @@ const RemoteDisplay = React.forwardRef((props, ref) => {
                                 disabled={isLoading}
                                 variant="outlined"
                                 color="inherit"
-                                onClick={switchComputer}
+                                onClick={() => { setActiveUsersVisible(true); }}
                             >
                                 Other Users
                             </Button>
@@ -120,6 +119,7 @@ const RemoteDisplay = React.forwardRef((props, ref) => {
                                 variant="contained"
                                 color="inherit"
                                 style={{
+                                    background: (isLoading == true) ? "#000000" : "#FFFFFF",
                                     color: '#000000',
                                     marginLeft: '10px',
                                 }}
@@ -129,23 +129,44 @@ const RemoteDisplay = React.forwardRef((props, ref) => {
                             </Button>
                         </Toolbar>
                     </AppBar>
-                    <VncScreen
-                        key={sessionData.renderKey}
-                        url={`${sessionData.wsProtocol}://${sessionData.computerData.address}:${sessionData.vncPort}`}
-                        scaleViewport
-                        viewOnly={viewOnly}
-                        background="#000000"
-                        loadingUI={<Box></Box>}
-                        onConnect={() => { setIsLoading(false); }}
-                        onDisconnect={() => { setIsLoading(true); }}
-                        style={{
-                            flexGrow: '1',
-                            background: '#000000',
-                            width: '100%',
-                            height: '90%',
-                        }}
-                    />
+                    <Box style={{
+                        flexGrow: '1',
+                        background: '#000000',
+                        width: '100%',
+                        height: '90%',
+                        position: 'relative'
+                    }}>
+                        <Box style={{ 
+                            background: 'rgba(0, 0, 0, 0)', 
+                            width: "100%", 
+                            height: "100%", 
+                            position: 'absolute',
+                            display: (viewOnly == true) ? 'block' : 'none'
+                        }}></Box>
+                        <VncScreen
+                            key={sessionData.renderKey}
+                            url={`${sessionData.wsProtocol}://${sessionData.computerData.address}:${sessionData.vncPort}`}
+                            scaleViewport
+                            viewOnly={false}
+                            background="#000000"
+                            loadingUI={<Box></Box>}
+                            onConnect={() => { setIsLoading(false); }}
+                            onDisconnect={() => { setIsLoading(true); }}
+                            style={{
+                                flexGrow: '1',
+                                background: '#000000',
+                                width: '100%',
+                                height: '100%',
+                            }}
+                        />
+                    </Box>
                 </Dialog>
+                <VncUserSessions
+                    visibility={activeUsersVisible}
+                    visibleToggleRequest={() => { setActiveUsersVisible(false); }}
+                    switchSessionRequest={(sessionId) => { switchSession(sessionData.computerData, sessionId) }}
+                    computerData={sessionData.computerData}
+                />
             </Box>
             <Snackbar
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}

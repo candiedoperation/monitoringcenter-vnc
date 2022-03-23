@@ -8,8 +8,8 @@ import RemoteDisplay from '../components/RemoteDisplay';
 function ComputerScreen(props) {
     const [isListView, setListView] = React.useState(false);
     const RemoteDisplayReference = React.useRef();
-    const handleViewToggleRequest = (computerData) => {
-        RemoteDisplayReference.current.RemoteDisplayComputer(computerData)
+    const handleViewToggleRequest = (computerData, callback) => {
+        RemoteDisplayReference.current.RemoteDisplayComputer(computerData, callback)
     }
 
     return (
